@@ -21,7 +21,8 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return false;
+        return $post->is_status || ($user && ($user->id == $post->user_id || in_array($user->role, ['admin', 'editor'])));
+
     }
 
     /**
@@ -29,7 +30,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role, ['admin','editor','author']);
     }
 
     /**
@@ -37,7 +38,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return false;
+        return $user->id == $post->user_id || in_array($user->role, ['admin','editor']);
     }
 
     /**
@@ -45,15 +46,15 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return false;
+        return in_array($user->role, ['admin','editor']);
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Post $post): bool
+    public function publish(User $user, Post $post): bool
     {
-        return false;
+        return in_array($user->role, ['admin','editor']);
     }
 
     /**

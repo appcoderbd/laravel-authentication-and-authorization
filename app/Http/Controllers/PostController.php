@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -14,6 +15,7 @@ class PostController extends Controller
     public function index()
     {
         //
+        return view('post.post-list');
     }
 
     /**
@@ -22,6 +24,8 @@ class PostController extends Controller
     public function create()
     {
         //
+        Gate::authorize('create', Post::class);
+        return view('post.create');
     }
 
     /**
@@ -30,6 +34,8 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         //
+        Gate::authorize('create', Post::class);
+        dd($request);
     }
 
     /**

@@ -1,14 +1,17 @@
 <x-app-layout>
-<x-slot name="header">
-    <h2 class="font-semibold text-sm text-gray-800 dark:text-gray-200 leading-tight">
-        <div class="flex gap-4">
-            <a href="#" class="underline bg-lime-300 py-1 px-2 text-black hover:text-red-700 rounded-md">NEW POST</a>
-            <a href="#" class="underline bg-lime-300 py-1 px-2 text-black hover:text-red-700 rounded-md">PENDING</a>
-            <a href="#" class="underline bg-lime-300 py-1 px-2 text-black hover:text-red-700 rounded-md">ALL POST</a>
-        </div>
-    </h2>
-</x-slot>
-
+    @if (in_array(auth()->user()->role, ['admin','editor','author']))
+    <x-slot name="header">
+        <h2 class="font-semibold text-sm text-gray-800 dark:text-gray-200 leading-tight">
+            <div class="flex gap-4">
+                <a href="{{ route('posts.create') }}" class="underline bg-lime-300 py-1 px-2 text-black hover:text-red-700 rounded-md">NEW POST</a>
+                @if(in_array(auth()->user()->role, ['admin','editor']))
+                    <a href="#" class="underline bg-lime-300 py-1 px-2 text-black hover:text-red-700 rounded-md">PENDING</a>
+                @endif
+                <a href="#" class="underline bg-lime-300 py-1 px-2 text-black hover:text-red-700 rounded-md">ALL POST</a>
+            </div>
+        </h2>
+    </x-slot>
+    @endif
     <div class="pt-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
