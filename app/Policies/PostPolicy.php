@@ -13,7 +13,7 @@ class PostPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return in_array($user->role, ['admin', 'editor','author','user']);
     }
 
     /**
@@ -63,5 +63,11 @@ class PostPolicy
     public function forceDelete(User $user, Post $post): bool
     {
         return false;
+    }
+
+    public function pending_post(User $user): bool
+    {
+
+        return in_array($user->role, ['admin','editor']);
     }
 }

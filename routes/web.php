@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,13 @@ Route::middleware('auth')->group(function () {
 
 
 Route::resource('posts',PostController::class)->middleware('auth');
+// Route::get('/posts/pending',[WebController::class, 'pending'])->name('posts.pending');
+
+Route::get('/pending/posts', [WebController::class, 'pending'])->name('post.pending');
+Route::post('/posts/{post}/publish', [WebController::class, 'post_publish'])->name('posts.publish');
+
+
+
+
 
 require __DIR__.'/auth.php';

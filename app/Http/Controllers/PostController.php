@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
@@ -15,7 +17,9 @@ class PostController extends Controller
     public function index()
     {
         //
-        return view('post.post-list');
+        Gate::authorize('viewAny',Post::class);
+        $posts = Post::where('is_status', true)->get();
+        return view('post.post-list', compact('posts'));
     }
 
     /**
@@ -33,9 +37,28 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
+        // dd('reached method');
         //
         Gate::authorize('create', Post::class);
-        dd($request);
+
+        $validated = $request->validated();
+
+        if($request->hasFile('post_image')){
+            $filePath = $request->file('post_image')->store('post_image','public');
+            $validated['post_image'] = $filePath;
+        }
+
+        // dd($validated);
+
+        try{
+
+            Post::create($validated);
+            return redirect()->back()->with('status','Post created successfully');
+
+        }catch(Exception $e){
+
+            return redirect()->back()->withErrors(['status' => 'Post Create field']);
+        }
     }
 
     /**
@@ -44,6 +67,9 @@ class PostController extends Controller
     public function show(Post $post)
     {
         //
+        Gate::authorize('view', $post);
+        // dd('This is ok');
+        return view('post.view-post', compact('post'));
     }
 
     /**
@@ -69,4 +95,5 @@ class PostController extends Controller
     {
         //
     }
+
 }

@@ -21,31 +21,56 @@
         <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
             <h1 class="text-2xl font-bold mb-4">Create Post</h1>
 
+             @if (session('status'))
+                <div class="mb-4 p-3 text-green-700 bg-green-100 rounded-lg border border-green-300">
+                    {{ session('status') }}
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Title -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-2">Title</label>
-                    <input type="text" name="title"
+                    <input type="text" name="title" value="{{ old('title') }}"
+                        class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        placeholder="Enter post title">
+
+                        <input type="hidden" value="{{ auth()->user()->id }}" name="user_id"
                         class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         placeholder="Enter post title">
                 </div>
+                @error('title')
+                    <div class="text-sm text-red-500" >
+                        {{ $message }}
+                    </div>
+                @enderror
 
                 <!-- Description -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-2">Description</label>
-                    <textarea name="description" rows="4"
+                    <textarea name="content" rows="4"
                         class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        placeholder="Write your post description"></textarea>
+                        placeholder="Write your post description">{{ old('content') }}</textarea>
                 </div>
+                @error('content')
+                    <div class="text-sm text-red-500" >
+                        {{ $message }}
+                    </div>
+                @enderror
 
                 <!-- Image -->
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-2">Upload Image</label>
-                    <input type="file" name="image"
+                    <input type="file" name="post_image"
                         class="w-full px-4 py-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 </div>
+                @error('post_image')
+                    <div class="text-sm text-red-500" >
+                        {{ $message }}
+                    </div>
+                @enderror
 
                 <!-- Submit -->
                 <button type="submit"

@@ -43,5 +43,30 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+
+        <div class="flex flex-col mt-5 space-y-20 items-center">
+
+
+            <a href="{{ route('login.github') }}">
+                <div class="relative flex items-center space-x-4 justify-center mt-6">
+                    <x-github-login-button>
+                        {{ __('Continue with Github') }}
+                    </x-github-login-button>
+                </div>
+            </a>
+
+             {{-- <div class="relative flex items-center space-x-4 justify-center mt-10">
+                <x-google-login-button>
+                    {{ __('Continue with Google') }}
+                </x-google-login-button>
+            </div> --}}
+
+        </div>
     </form>
+
+
+
+
+
+
 </x-guest-layout>
